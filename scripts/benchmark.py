@@ -80,6 +80,7 @@ if __name__ == '__main__':
                 np.random.seed(42)
                 nnet = TestNet()
                 x = torch.randn(batch_size, wav_length*args.fs)
+                x[:, round(x.shape[-1]*0.5):round(x.shape[-1]*0.6)] = 0
                 if args.cuda:
                     x = x.cuda()
                     nnet = nnet.cuda()
