@@ -21,8 +21,8 @@ class TestNet(nn.Module):
 
 
 def plot():
-    times_master = np.load(f'times-master-{suffix}.npy')
-    times_philgzl = np.load(f'times-philgzl-{suffix}.npy')
+    times_master = np.load(f'npy/times/master-{suffix}.npy')
+    times_philgzl = np.load(f'npy/times/philgzl-{suffix}.npy')
     os.makedirs('plots/times', exist_ok=True)
     for j, wav_length in enumerate(args.wav_length):
         plt.figure()
