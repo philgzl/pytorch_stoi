@@ -75,15 +75,16 @@ if __name__ == '__main__':
                 batch_size = args.batch_size[i]
                 wav_length = args.wav_length[j]
                 print(f'batch_size={batch_size}, wav_length={wav_length}')
+                criterion = NegSTOILoss(sample_rate=args.fs, use_vad=use_vad,
+                                        extended=extended)
                 np.random.seed(42)
                 nnet = TestNet()
                 x = torch.randn(batch_size, wav_length*args.fs)
                 if args.cuda:
                     x = x.cuda()
                     nnet = nnet.cuda()
+                    criterion = criterion.cuda()
                 y = nnet(x)
-                criterion = NegSTOILoss(sample_rate=args.fs, use_vad=use_vad,
-                                        extended=extended)
 
                 def to_time():
                     loss = criterion(x, y).mean()
