@@ -124,7 +124,7 @@ class NegSTOILoss(nn.Module):
 
         if self.use_vad:
             targets, est_targets, mask = self.remove_silent_frames(
-                targets, est_targets, self.dyn_range, self.win_len,
+                targets, est_targets, self.dyn_range, self.win, self.win_len,
                 self.win_len//2
             )
             # Remove the last mask frame to replicate pystoi behavior
@@ -224,7 +224,7 @@ class NegSTOILoss(nn.Module):
         return - output
 
     @staticmethod
-    def remove_silent_frames(x, y, dyn_range, framelen, hop):
+    def remove_silent_frames(x, y, dyn_range, window, framelen, hop):
         """ Detects silent frames on input tensor.
         A frame is excluded if its energy is lower than max(energy) - dyn_range
 
@@ -237,8 +237,6 @@ class NegSTOILoss(nn.Module):
         Returns:
             torch.BoolTensor, framewise mask.
         """
-        window = torch.from_numpy(np.hanning(framelen + 2)[1:-1])
-
         x_frames = unfold(x[:, None, None, :], kernel_size=(1, framelen),
                           stride=(1, hop))
         y_frames = unfold(y[:, None, None, :], kernel_size=(1, framelen),
@@ -252,7 +250,7 @@ class NegSTOILoss(nn.Module):
         # Find boolean mask of energies lower than dynamic_range dB
         # with respect to maximum clean speech energy frame
         mask = (x_energies.amax(2, keepdim=True) - dyn_range - x_energies) < 0
-        mask = mask.squeeze(1)
+        mask = mask.squeeze(1).long()
 
         # Remove silent frames and pad with zeroes
         x_frames = x_frames.permute(0, 2, 1)
