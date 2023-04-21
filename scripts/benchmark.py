@@ -78,6 +78,9 @@ if __name__ == '__main__':
                 np.random.seed(42)
                 nnet = TestNet()
                 x = torch.randn(batch_size, wav_length*args.fs)
+                if args.cuda:
+                    x = x.cuda()
+                    nnet = nnet.cuda()
                 y = nnet(x)
                 criterion = NegSTOILoss(sample_rate=args.fs, use_vad=use_vad,
                                         extended=extended)
