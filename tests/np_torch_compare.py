@@ -76,20 +76,20 @@ if __name__ == '__main__':
         df = main(args.file_list)
     if args.df is not None:
         df = pd.read_csv(args.df)
-        u = np.arange(1000) / 1000  # To make diagonal
+    u = np.arange(1000) / 1000  # To make diagonal
 
-        # 8K plots
-        df8k = df[df['fs'] == 8000.0]
-        df8k = df8k[df8k['np'] != 1e-5]  # Very short utts
+    # 8K plots
+    df8k = df[df['fs'] == 8000.0]
+    df8k = df8k[df8k['np'] != 1e-5]  # Very short utts
 
-        do_plot('np', 'pt_vad', df8k, title="8kHz with VAD")
-        do_plot('np', 'pt', df8k, title="8kHz w/o VAD")
-        do_plot('np_ext', 'pt_vad_ext', df8k, title="8kHz Extended with VAD")
-        do_plot('np_ext', 'pt_ext', df8k, title="8kHz Extended w/o VAD")
+    do_plot('np', 'pt_vad', df8k, title="8kHz with VAD")
+    do_plot('np', 'pt', df8k, title="8kHz w/o VAD")
+    do_plot('np_ext', 'pt_vad_ext', df8k, title="8kHz Extended with VAD")
+    do_plot('np_ext', 'pt_ext', df8k, title="8kHz Extended w/o VAD")
 
-        # 16k plots
-        df16k = df[df['fs'] == 16000.0]
-        do_plot('np', 'pt_vad', df16k, title="16kHz with VAD")
-        do_plot('np', 'pt', df16k, title="16kHz w/o VAD")
-        do_plot('np_ext', 'pt_vad_ext', df16k, title="16kHz Extended with VAD")
-        do_plot('np_ext', 'pt_ext', df16k, title="16kHz Extended w/o VAD")
+    # 16k plots
+    df16k = df[df['fs'] == 16000.0]
+    do_plot('np', 'pt_vad', df16k, title="16kHz with VAD")
+    do_plot('np', 'pt', df16k, title="16kHz w/o VAD")
+    do_plot('np_ext', 'pt_vad_ext', df16k, title="16kHz Extended with VAD")
+    do_plot('np_ext', 'pt_ext', df16k, title="16kHz Extended w/o VAD")
