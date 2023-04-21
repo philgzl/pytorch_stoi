@@ -250,7 +250,7 @@ class NegSTOILoss(nn.Module):
         # Find boolean mask of energies lower than dynamic_range dB
         # with respect to maximum clean speech energy frame
         mask = (x_energies.amax(2, keepdim=True) - dyn_range - x_energies) < 0
-        mask = mask.squeeze(1).long()
+        mask = mask.squeeze(1)
 
         # Remove silent frames and pad with zeroes
         x_frames = x_frames.permute(0, 2, 1)
@@ -263,7 +263,7 @@ class NegSTOILoss(nn.Module):
         x_frames = x_frames.permute(0, 2, 1)
         y_frames = y_frames.permute(0, 2, 1)
 
-        return x_sil, y_sil, mask
+        return x_sil, y_sil, mask.long()
 
     @staticmethod
     def stft(x, win, fft_size, overlap=4):
