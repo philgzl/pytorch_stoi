@@ -56,21 +56,23 @@ def do_plot(x, y, data, title=None):
     plt.figure(figsize=(6, 4))
     sns.scatterplot(x=x, y=y, data=data)
     plt.xlim(0, 1)
-    plt.ylim(0, 1.5)
+    plt.ylim(0, 1)
     plt.xlabel('NumPy (pystoi)')
     plt.ylabel('PyTorch (here)')
     plt.plot(u, u)
     plt.title(title)
     filename = title.replace(' ', '').replace(',', '').replace('/', '')
     os.makedirs('plots', exist_ok=True)
-    plt.savefig('plots/{}.png'.format(filename), dpi=200)
-    plt.close()
+    plt.savefig('plots/{}.png'.format(filename), dpi=200),
+    if not args.show:
+        plt.close()
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--file_list')
     parser.add_argument('--df')
+    parser.add_argument('--show', action='store_true')
     args = parser.parse_args()
     if args.file_list is not None:
         df = main(args.file_list)
@@ -93,3 +95,6 @@ if __name__ == '__main__':
     do_plot('np', 'pt', df16k, title="16kHz w/o VAD")
     do_plot('np_ext', 'pt_vad_ext', df16k, title="16kHz Extended with VAD")
     do_plot('np_ext', 'pt_ext', df16k, title="16kHz Extended w/o VAD")
+
+    if args.show:
+        plt.show()
