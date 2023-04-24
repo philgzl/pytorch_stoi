@@ -44,11 +44,31 @@ def plot():
         plt.legend()
         plt.savefig(f'plots/times/{suffix}-wav_length={wav_length}.png')
 
+    plt.figure()
+    for j, wav_length in enumerate(args.wav_length):
+        plt.plot(
+            times_philgzl[:, j] / times_master[:, j],
+            'o-',
+            label=f'wav_length={wav_length} s',
+        )
+        plt.title(
+            f'repeats={args.repeats}, '
+            f'use_vad={use_vad} s, '
+            f'extended={extended} s, '
+            f'fs={args.fs}, '
+        )
+    plt.xticks(range(len(args.batch_size)), args.batch_size)
+    plt.xlabel('Batch size')
+    plt.ylabel('Time fold increase (x)')
+    plt.legend()
+    plt.savefig(f'plots/times/diff_{suffix}.png')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--benchmark', choices=['master', 'philgzl'])
     parser.add_argument('--plot', action='store_true')
+    parser.add_argument('--show', action='store_true')
     parser.add_argument('--batch-size', type=int, nargs='+',
                         default=[1, 2, 4, 8])
     parser.add_argument('--wav-length', type=int, nargs='+',
@@ -103,3 +123,6 @@ if __name__ == '__main__':
 
         if args.plot:
             plot()
+
+    if args.show:
+        plt.show()
