@@ -77,10 +77,14 @@ if __name__ == '__main__':
     parser.add_argument('--repeats', type=int, default=100)
     parser.add_argument('--cuda', action='store_true')
     parser.add_argument('--bottleneck', action='store_true')
+    parser.add_argument('--extended', nargs='+', default=[0, 1])
+    parser.add_argument('--use_vad', nargs='+', default=[0, 1])
     args = parser.parse_args()
 
     os.makedirs('npy/times', exist_ok=True)
-    for use_vad, extended in itertools.product([True, False], [True, False]):
+    for use_vad, extended in itertools.product(args.use_vad, args.extended):
+        use_vad = bool(use_vad)
+        extended = bool(extended)
         suffix = (
             f'use_vad={use_vad}_'
             f'extended={extended}'
