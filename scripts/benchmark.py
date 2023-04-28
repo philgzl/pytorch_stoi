@@ -76,6 +76,7 @@ if __name__ == '__main__':
     parser.add_argument('--fs', type=int, default=10000)
     parser.add_argument('--repeats', type=int, default=100)
     parser.add_argument('--cuda', action='store_true')
+    parser.add_argument('--bottleneck', action='store_true')
     args = parser.parse_args()
 
     os.makedirs('npy/times', exist_ok=True)
@@ -111,14 +112,20 @@ if __name__ == '__main__':
                     loss = criterion(x, y).mean()
                     loss.backward(retain_graph=True)
 
-                times[i, j] = timeit.timeit(
-                    "to_time()",
-                    number=args.repeats,
-                    setup=(
-                        "from __main__ import args, x, y, criterion, to_time;"
-                        "from pystoi import stoi"
+                if args.bottleneck:
+                    start = timeit.default_timer()
+                    for _ in range(args.repeats):
+                        to_time()
+                    end = timeit.default_timer()
+                    times[i, j] = end - start
+                else:
+                    times[i, j] = timeit.timeit(
+                        "to_time()",
+                        number=args.repeats,
+                        setup=(
+                            "from __main__ import x, y, criterion, to_time;"
+                        )
                     )
-                )
             np.save(outfile, times)
 
         if args.plot:
