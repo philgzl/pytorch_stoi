@@ -9,7 +9,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
-from pystoi import stoi
+from tests.pystoi import stoi
 from torch_stoi import NegSTOILoss
 
 
